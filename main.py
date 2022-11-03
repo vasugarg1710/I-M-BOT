@@ -90,7 +90,7 @@ def answer():
             chat_entry.delete(0, END)
 
     # when messages are filled up
-        if userMessages == 4:
+        if userMessages >= 4:
             clear_frame()
             displayBotMessage("Screen cleared up!")
             userMessages = 0

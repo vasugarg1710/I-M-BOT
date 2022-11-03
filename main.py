@@ -15,6 +15,19 @@ dictQA = {'How are u': 'I am fine',
           'Who are u': 'I am your assistant',
           'Hi':'Hello'}
 
+def changeTheme(themeColor):
+    global messageFrame
+    global userFrame
+    if themeColor=="dark":
+        messageFrame.configure(bg="black")
+        userFrame.configure(bg="black")
+        displayBotMessage("Theme changed to dark mode")
+    elif themeColor=="light":
+        messageFrame.configure(bg="light grey")
+        userFrame.configure(bg="light grey")
+        displayBotMessage("Theme changed to light mode")
+    else:
+        displayBotMessage("Theme not found")
 
 def playBeep():
     path = "audio/beep.wav"
@@ -60,9 +73,13 @@ def answer():
         else:
             #Some Custom Functions
             if "stock price" in chat_entry.get().lower().strip():
-                words = chat_entry.get().split()
+                words = chat_entry.get().lower().strip().split()
                 fetchStockPrice(words[len(words)-1])
                 matchFound = True
+            if "theme" in chat_entry.get().lower().strip():
+                themeColor = chat_entry.get().lower().strip().split()[-1]
+                changeTheme(themeColor)
+                matchFound=True
             for i in dictQA.keys():
                 if chat_entry.get().lower().strip() == i.lower():
                     displayBotMessage(dictQA[i].capitalize())
@@ -78,7 +95,7 @@ def answer():
             displayBotMessage("Screen cleared up!")
             userMessages = 0
     userMessages += 1
-    print(userMessages)
+    # print(userMessages)
 
 def clear_frame():
     global messageFrame

@@ -2,6 +2,8 @@ from tkinter import *
 from playsound import playsound
 import yfinance as YF
 import wikipedia
+import python_weather
+import asyncio
 root = Tk()
 root.title("Chat Bot")
 # root.maxsize(844, 744)
@@ -16,14 +18,21 @@ dictQA = {'How are u': 'I am fine',
           'Who are u': 'I am your assistant',
           'Hi': 'Hello'}
 
-
+async def getweather(city):
+    try:
+        async with python_weather.Client(format=python_weather.IMPERIAL) as client:
+            print(city)
+            weather = await client.get(city.title())
+            displayBotMessage(f"The current temperature of {city} is {weather.current.temperature} F")
+    except Exception as e:
+        displayBotMessage("Weather not available for this city")
+    
 def fetchWiki(query):
     try:
         displayBotMessage(wikipedia.summary(
-            wikipedia.search(query)[0], sentences=1)[120]+"...")
+            wikipedia.search(query)[0], sentences=1)[0:120]+"...")
     except Exception as e:
         displayBotMessage("Try asking something else")
-
 
 def changeTheme(themeColor):
     global messageFrame
@@ -82,7 +91,7 @@ def answer():
     if chat_entry.get().strip() != "":
         matchFound = False
         displayUserMessage(chat_entry.get().strip())
-        if userMessages == 0:
+        if userMessages == 0: # user entered his name
             displayBotMessage(f"Hi {chat_entry.get().strip().capitalize()}")
             # displayBotMessage('Try asking me some questions like "What is the stock price of <ticker>"')
             chat_entry.delete(0, END)
@@ -93,15 +102,19 @@ def answer():
                 words = chat_entry.get().lower().strip().split()
                 fetchStockPrice(words[len(words)-1])
                 matchFound = True
-            if "theme" in chat_entry.get().lower().strip():
+            elif "theme" in chat_entry.get().lower().strip():
                 themeColor = chat_entry.get().lower().strip().split()[-1]
                 changeTheme(themeColor)
                 matchFound = True
-            for i in dictQA.keys():
-                if chat_entry.get().lower().strip() == i.lower():
-                    displayBotMessage(dictQA[i].capitalize())
-                    matchFound = True
-
+            elif "temperature" or "weather" in chat_entry.get().lower().strip():
+                city = chat_entry.get().lower().strip().split()[-1]
+                asyncio.run(getweather(city))
+                matchFound=True
+            else:
+                for i in dictQA.keys(): 
+                    if chat_entry.get().lower().strip() == i.lower(): #if message exists in dictionary 
+                        displayBotMessage(dictQA[i].capitalize())
+                        matchFound = True
             if matchFound == False:
                 fetchWiki(chat_entry.get().strip())
             chat_entry.delete(0, END)

@@ -20,7 +20,8 @@ dictQA = {'How are u': 'I am fine',
           'Who are u': 'I am your assistant',
           'Hi': 'Hello',
           "what's up": "I am good",
-          'hello':'hi'}
+          'hello': 'hi'}
+
 
 async def getweather(city):
     warnings.filterwarnings("ignore")
@@ -28,16 +29,19 @@ async def getweather(city):
         async with python_weather.Client(format=python_weather.IMPERIAL) as client:
             # print(city)
             weather = await client.get(city.title())
-            displayBotMessage(f"The current temperature of {city} is {weather.current.temperature} F")
+            displayBotMessage(
+                f"The current temperature of {city} is {weather.current.temperature} F")
     except Exception as e:
         displayBotMessage("Weather not available for this city")
-    
+
+
 def fetchWiki(query):
     try:
         displayBotMessage(wikipedia.summary(
             wikipedia.search(query)[0], sentences=1)[0:120]+"...")
     except Exception as e:
         displayBotMessage("Try asking something else")
+
 
 def changeTheme(themeColor):
     global messageFrame
@@ -97,7 +101,7 @@ def answer():
     if userEntry != "":
         matchFound = False
         displayUserMessage(chat_entry.get().strip())
-        if userMessages == 0: # user entered his name
+        if userMessages == 0:  # user entered his name
             displayBotMessage(f"Hi {userEntry.capitalize()}")
             # displayBotMessage('Try asking me some questions like "What is the stock price of <ticker>"')
             userMessages = 1
@@ -116,22 +120,27 @@ def answer():
                 # print("in this loop")
                 city = userEntry.split()[-1]
                 asyncio.run(getweather(city))
-                matchFound=True
+                matchFound = True
             else:
-                for i in dictQA.keys(): 
-                    if i.lower() in userEntry: #if message exists in dictionary 
+                for i in dictQA.keys():
+                    if i.lower() in userEntry:  # if message exists in dictionary
                         displayBotMessage(dictQA[i].capitalize())
                         matchFound = True
             if matchFound == False:
                 fetchWiki(chat_entry.get().strip())
 
     # when messages are filled up
+        clear = True
         if userMessages == 4:
             clear_frame()
             displayBotMessage("Screen cleared up!")
             userMessages = 0
+            clear = False
     userMessages += 1
-    chat_entry.delete(0, END)
+    if clear == True:
+        chat_entry.delete(0, END)
+    else:
+        answer()
     # print(userMessages)
 
 

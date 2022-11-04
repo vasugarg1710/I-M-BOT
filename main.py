@@ -18,7 +18,9 @@ userMessages = 0
 dictQA = {'How are u': 'I am fine',
           'How old are u': 'I am 16',
           'Who are u': 'I am your assistant',
-          'Hi': 'Hello'}
+          'Hi': 'Hello',
+          "what's up": "I am good",
+          'hello':'hi'}
 
 async def getweather(city):
     warnings.filterwarnings("ignore")
@@ -117,7 +119,7 @@ def answer():
                 matchFound=True
             else:
                 for i in dictQA.keys(): 
-                    if userEntry == i.lower(): #if message exists in dictionary 
+                    if i.lower() in userEntry: #if message exists in dictionary 
                         displayBotMessage(dictQA[i].capitalize())
                         matchFound = True
             if matchFound == False:

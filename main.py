@@ -1,10 +1,11 @@
 from tkinter import *
 from playsound import playsound
 import yfinance as YF
+import wikipedia
 root = Tk()
 root.title("Chat Bot")
-root.maxsize(844, 744)
-root.minsize(844, 744)
+# root.maxsize(844, 744)
+root.minsize(root.winfo_screenwidth()-150, root.winfo_screenheight()-150)
 
 # Some predefined things
 num = 0
@@ -14,6 +15,14 @@ dictQA = {'How are u': 'I am fine',
           'How old are u': 'I am 16',
           'Who are u': 'I am your assistant',
           'Hi':'Hello'}
+
+def fetchWiki(query):
+    try:
+        page = wikipedia.search(query)[0]
+        displayBotMessage(wikipedia.summary(page, sentences=1)[0:120]+"...")
+    except Exception as E:
+        displayBotMessage("Try asking something else")
+    
 
 def changeTheme(themeColor):
     global messageFrame
@@ -67,7 +76,7 @@ def answer():
         displayUserMessage(chat_entry.get().strip())
         if userMessages == 0:
             displayBotMessage(f"Hi {chat_entry.get().strip().capitalize()}")
-            displayBotMessage('Try asking me some questions like "What is the stock price of <ticker>"')
+            # displayBotMessage('Try asking me some questions like "What is the stock price of <ticker>"')
             chat_entry.delete(0, END)
             userMessages = 1
         else:
@@ -76,17 +85,18 @@ def answer():
                 words = chat_entry.get().lower().strip().split()
                 fetchStockPrice(words[len(words)-1])
                 matchFound = True
-            if "theme" in chat_entry.get().lower().strip():
+            elif "theme" in chat_entry.get().lower().strip():
                 themeColor = chat_entry.get().lower().strip().split()[-1]
                 changeTheme(themeColor)
                 matchFound=True
-            for i in dictQA.keys():
-                if chat_entry.get().lower().strip() == i.lower():
-                    displayBotMessage(dictQA[i].capitalize())
-                    matchFound = True
+            else:
+                for i in dictQA.keys():
+                    if chat_entry.get().lower().strip() == i.lower():
+                        displayBotMessage(dictQA[i].capitalize())
+                        matchFound = True
 
             if matchFound == False:
-                displayBotMessage("Try asking something different ")
+                fetchWiki(chat_entry.get().strip())
             chat_entry.delete(0, END)
 
     # when messages are filled up

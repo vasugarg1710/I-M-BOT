@@ -14,36 +14,36 @@ userMessages = 0
 dictQA = {'How are u': 'I am fine',
           'How old are u': 'I am 16',
           'Who are u': 'I am your assistant',
-          'Hi':'Hello'}
+          'Hi': 'Hello'}
 
-<<<<<<< HEAD
-=======
+
 def fetchWiki(query):
     try:
-        page = wikipedia.search(query)[0]
-        displayBotMessage(wikipedia.summary(page, sentences=1)[0:120]+"...")
-    except Exception as E:
+        displayBotMessage(wikipedia.summary(
+            wikipedia.search(query)[0], sentences=1)[120]+"...")
+    except Exception as e:
         displayBotMessage("Try asking something else")
-    
 
->>>>>>> NewFeatures
+
 def changeTheme(themeColor):
     global messageFrame
     global userFrame
-    if themeColor=="dark":
+    if themeColor == "dark":
         messageFrame.configure(bg="black")
         userFrame.configure(bg="black")
         displayBotMessage("Theme changed to dark mode")
-    elif themeColor=="light":
+    elif themeColor == "light":
         messageFrame.configure(bg="light grey")
         userFrame.configure(bg="light grey")
         displayBotMessage("Theme changed to light mode")
     else:
         displayBotMessage("Theme not found")
 
+
 def playBeep():
     path = "audio/beep.wav"
     playsound(path)
+
 
 def displayUserMessage(t):
     global messageFrame
@@ -59,17 +59,22 @@ def displayBotMessage(t):
                     foreground="black", background="light green", padx='5', pady='5')
     display.pack(anchor="w", pady="10", padx="10")
 
+
 def fetchStockPrice(ticker):
     try:
-        cmp = round(YF.Ticker(ticker.upper()).info['regularMarketPrice'],2)
+        cmp = round(YF.Ticker(ticker.upper()).info['regularMarketPrice'], 2)
         displayBotMessage(f"The stock price of {ticker.upper()} is {cmp}.")
     except Exception as e:
-        displayBotMessage("Invalid stock ticker entered or there is some problem with ur internet connection")
+        displayBotMessage(
+            "Invalid stock ticker entered or there is some problem with ur internet connection")
+
 
 def enter_key(event):
     answer()
 
 # creating a bot answer function
+
+
 def answer():
     global userMessages
     global qText
@@ -83,31 +88,19 @@ def answer():
             chat_entry.delete(0, END)
             userMessages = 1
         else:
-            #Some Custom Functions
+            # Some Custom Functions
             if "stock price" in chat_entry.get().lower().strip():
                 words = chat_entry.get().lower().strip().split()
                 fetchStockPrice(words[len(words)-1])
                 matchFound = True
-<<<<<<< HEAD
             if "theme" in chat_entry.get().lower().strip():
                 themeColor = chat_entry.get().lower().strip().split()[-1]
                 changeTheme(themeColor)
-                matchFound=True
+                matchFound = True
             for i in dictQA.keys():
                 if chat_entry.get().lower().strip() == i.lower():
                     displayBotMessage(dictQA[i].capitalize())
                     matchFound = True
-=======
-            elif "theme" in chat_entry.get().lower().strip():
-                themeColor = chat_entry.get().lower().strip().split()[-1]
-                changeTheme(themeColor)
-                matchFound=True
-            else:
-                for i in dictQA.keys():
-                    if chat_entry.get().lower().strip() == i.lower():
-                        displayBotMessage(dictQA[i].capitalize())
-                        matchFound = True
->>>>>>> NewFeatures
 
             if matchFound == False:
                 fetchWiki(chat_entry.get().strip())
@@ -120,6 +113,7 @@ def answer():
             userMessages = 0
     userMessages += 1
     # print(userMessages)
+
 
 def clear_frame():
     global messageFrame

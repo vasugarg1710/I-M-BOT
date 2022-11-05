@@ -26,11 +26,11 @@ dictQA = {'How are u': 'I am fine',
 async def getweather(city):
     warnings.filterwarnings("ignore")
     try:
-        async with python_weather.Client(format=python_weather.IMPERIAL) as client:
+        async with python_weather.Client(format=python_weather.METRIC) as client:
             # print(city)
             weather = await client.get(city.title())
             displayBotMessage(
-                f"The current temperature of {city} is {weather.current.temperature} F")
+                f"The current temperature of {city} is {weather.current.temperature} C")
     except Exception as e:
         displayBotMessage("Weather not available for this city")
 
@@ -119,6 +119,8 @@ def answer():
             elif "temperature" in userEntry or "weather" in userEntry:
                 # print("in this loop")
                 city = userEntry.split()[-1]
+                if (city == "weather" or city == "temperature"):
+                    city = "Delhi"
                 asyncio.run(getweather(city))
                 matchFound = True
             else:

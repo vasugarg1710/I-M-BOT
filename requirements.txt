@@ -3,3 +3,4 @@ yfinance
 wikipedia
 python-weather
 asyncio
+pyttsx3

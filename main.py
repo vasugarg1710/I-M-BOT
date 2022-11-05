@@ -5,6 +5,7 @@ import wikipedia
 import python_weather
 import asyncio
 import warnings
+import pyttsx3
 
 root = Tk()
 root.title("Chat Bot")
@@ -76,6 +77,9 @@ def displayBotMessage(t):
     display = Label(messageFrame, text=t, font=("calibri", 15),
                     foreground="black", background="light green", padx='5', pady='5')
     display.pack(anchor="w", pady="10", padx="10")
+    engine = pyttsx3.init()
+    engine.say(t)
+    engine.runAndWait()
 
 
 def fetchStockPrice(ticker):
@@ -132,12 +136,12 @@ def answer():
                 fetchWiki(chat_entry.get().strip())
 
     # when messages are filled up
-        clear = True
-        if userMessages == 4:
-            clear_frame()
-            displayBotMessage("Screen cleared up!")
-            userMessages = 0
-            clear = False
+    clear = True
+    if userMessages == 4:
+        clear_frame()
+        displayBotMessage("Screen cleared up!")
+        userMessages = 0
+        clear = False
     userMessages += 1
     if clear == True:
         chat_entry.delete(0, END)

@@ -2,12 +2,9 @@ from tkinter import *
 from playsound import playsound
 import yfinance as YF
 import wikipedia
-import python_weather
-import asyncio
 import warnings
 import pyttsx3
 import requests
-
 root = Tk()
 root.title("Chat Bot")
 # root.maxsize(844, 744)
@@ -25,14 +22,12 @@ dictQA = {'How are u': 'I am fine',
           'hello': 'hi'}
 
 
-async def getweather(city):
+def getweather(city):
     url = 'https://wttr.in/{}?format=1'.format(city)
     res = requests.get(url)
     temperature = res.text.split()
     try:
-        async with python_weather.Client() as client:
-            displayBotMessage(
-                f"The current temperature of {city} is {temperature[1]}")
+        displayBotMessage(f"The current temperature of {city} is {temperature[1]}")
     except Exception as e:
         displayBotMessage("Weather not available for this city")
 
@@ -126,7 +121,7 @@ def answer():
                 city = userEntry.split()[-1]
                 if (city == "weather" or city == "temperature"):
                     city = "Delhi"
-                asyncio.run(getweather(city))
+                getweather(city)
                 matchFound = True
             else:
                 for i in dictQA.keys():

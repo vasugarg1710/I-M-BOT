@@ -1,6 +1,6 @@
 playsound==1.2.2
 yfinance
 wikipedia
-python-weather
+requests
 asyncio
 pyttsx3

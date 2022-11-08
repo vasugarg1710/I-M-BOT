@@ -6,6 +6,7 @@ import python_weather
 import asyncio
 import warnings
 import pyttsx3
+import requests
 
 root = Tk()
 root.title("Chat Bot")
@@ -25,13 +26,13 @@ dictQA = {'How are u': 'I am fine',
 
 
 async def getweather(city):
-    warnings.filterwarnings("ignore")
+    url = 'https://wttr.in/{}?format=1'.format(city)
+    res = requests.get(url)
+    temperature = res.text.split()
     try:
-        async with python_weather.Client(format=python_weather.METRIC) as client:
-            # print(city)
-            weather = await client.get(city.title())
+        async with python_weather.Client() as client:
             displayBotMessage(
-                f"The current temperature of {city} is {weather.current.temperature} C")
+                f"The current temperature of {city} is {temperature[1]}")
     except Exception as e:
         displayBotMessage("Weather not available for this city")
 

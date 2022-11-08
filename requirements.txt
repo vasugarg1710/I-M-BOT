@@ -2,5 +2,4 @@ playsound==1.2.2
 yfinance
 wikipedia
 requests
-asyncio
 pyttsx3

@@ -2,11 +2,9 @@ from tkinter import *
 from playsound import playsound
 import yfinance as YF
 import wikipedia
-import python_weather
-import asyncio
-import warnings
 import pyttsx3
 import requests
+from PIL import ImageTk, Image
 
 root = Tk()
 root.title("Chat Bot")
@@ -23,16 +21,16 @@ dictQA = {'How are u': 'I am fine',
           'Hi': 'Hello',
           "what's up": "I am good",
           'hello': 'hi'}
+voice = False
 
 
-async def getweather(city):
+def getweather(city):
     url = 'https://wttr.in/{}?format=1'.format(city)
     res = requests.get(url)
     temperature = res.text.split()
     try:
-        async with python_weather.Client() as client:
-            displayBotMessage(
-                f"The current temperature of {city} is {temperature[1]}")
+        displayBotMessage(
+            f"The current temperature of {city} is {temperature[1]}")
     except Exception as e:
         displayBotMessage("Weather not available for this city")
 
@@ -72,15 +70,20 @@ def displayUserMessage(t):
     display.pack(anchor="e", pady="10", padx="10")
     playBeep()
 
+def on_click(event=None):
+    global voice
+    voice = not voice
+
 
 def displayBotMessage(t):
     global messageFrame
     display = Label(messageFrame, text=t, font=("calibri", 15),
                     foreground="black", background="light green", padx='5', pady='5')
     display.pack(anchor="w", pady="10", padx="10")
-    engine = pyttsx3.init()
-    engine.say(t)
-    engine.runAndWait()
+    if voice:
+        engine = pyttsx3.init()
+        engine.say(t)
+        engine.runAndWait()
 
 
 def fetchStockPrice(ticker):
@@ -126,7 +129,7 @@ def answer():
                 city = userEntry.split()[-1]
                 if (city == "weather" or city == "temperature"):
                     city = "Delhi"
-                asyncio.run(getweather(city))
+                getweather(city)
                 matchFound = True
             else:
                 for i in dictQA.keys():
@@ -179,6 +182,11 @@ userFrame.pack(side=BOTTOM, fill="x")
 button = Button(userFrame, text="SEND", font=("calibri", 13, "bold"),
                 foreground="black", background="yellow", command=answer)
 button.pack(side="bottom", pady=(0, 10))
+#Display
+image = Image.open("img/speaker_on.png")
+photo = ImageTk.PhotoImage(image)
+b = Button(userFrame, image=photo, command=on_click)
+b.pack(after=button, side="right")
 
 # creating a user input entry
 chat_var = StringVar()

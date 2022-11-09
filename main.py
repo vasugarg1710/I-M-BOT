@@ -29,8 +29,7 @@ def getweather(city):
     res = requests.get(url)
     temperature = res.text.split()
     try:
-        displayBotMessage(
-            f"The current temperature of {city} is {temperature[1]}")
+        displayBotMessage(f"The current temperature of {city} is {temperature[1]}")
     except Exception as e:
         displayBotMessage("Weather not available for this city")
 

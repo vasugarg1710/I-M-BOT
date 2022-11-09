@@ -3,4 +3,4 @@ yfinance
 wikipedia
 requests
 pyttsx3
-PIL
+pillow

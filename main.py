@@ -33,6 +33,32 @@ def getweather(city):
     except Exception as e:
         displayBotMessage("Weather not available for this city")
 
+def careerInterest(interest):
+    if interest.lower()=="science":
+        displayBotMessage("Engineering, Doctor")
+    elif interest.lower()=="commerce":
+        displayBotMessage("CA")
+    elif interest.lower()=="humanities":
+        displayBotMessage("IAS, Laywer")
+    else:
+        displayBotMessage("There are only 3 streams available")
+
+def subOptions(subChoice):
+    subScience = ["physics", "chemistry", "maths", "biology"] 
+    subCommerce = ["accounts", "economics", "business-studies"] 
+    subArts = ["history", "political-science"] 
+
+    if subChoice in subScience:
+        displayBotMessage("Your interest is science")
+        careerInterest("Science")
+    elif subChoice in subCommerce:
+        displayBotMessage("Your interest is commerce")
+        careerInterest("Commerce")
+    elif subChoice in subArts:
+        displayBotMessage("Your interest is arts")
+        careerInterest("Humanities")
+    else:
+        print("Your interest is nowhere")
 
 def fetchWiki(query):
     try:
@@ -129,6 +155,12 @@ def answer():
                 if (city == "weather" or city == "temperature"):
                     city = "Delhi"
                 getweather(city)
+                matchFound = True
+            elif "career interest" in userEntry:
+                careerInterest(userEntry.split()[-1])
+                matchFound = True
+            elif "career subchoice" in userEntry:
+                subOptions(userEntry.split()[-1])
                 matchFound = True
             else:
                 for i in dictQA.keys():

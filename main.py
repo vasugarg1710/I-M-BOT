@@ -25,7 +25,7 @@ voice = False
 
 
 def getweather(city):
-    url = 'https://wttr.in/{}?format=1'.format(city)
+    url = 'https://wttr.in/?format=1'
     res = requests.get(url)
     temperature = res.text.split()
     try:

@@ -23,13 +23,28 @@ dictQA = {'How are u': 'I am fine',
           'hello': 'hi'}
 voice = False
 
+def get_ip():
+    response = requests.get('https://api64.ipify.org?format=json').json()
+    return response["ip"]
 
-def getweather(city):
+def get_location():
+    ip_address = get_ip()
+    response = requests.get(f'https://ipapi.co/{ip_address}/json/').json()
+    location_data = {
+        "city": response.get("city"),
+        "country": response.get("country")
+        }
+    return location_data
+
+def getweather():
+    loc = get_location()
+    city = loc.get("city")
+    country = loc.get("country")
     url = 'https://wttr.in/?format=1'
     res = requests.get(url)
     temperature = res.text.split()
     try:
-        displayBotMessage(f"The current temperature of {city} is {temperature[1]}")
+        displayBotMessage(f"The current temperature of {city}, {country} is {temperature[1]}")
     except Exception as e:
         displayBotMessage("Weather not available for this city")
 
@@ -150,11 +165,7 @@ def answer():
                 changeTheme(themeColor)
                 matchFound = True
             elif "temperature" in userEntry or "weather" in userEntry:
-                # print("in this loop")
-                city = userEntry.split()[-1]
-                if (city == "weather" or city == "temperature"):
-                    city = "Delhi"
-                getweather(city)
+                getweather()
                 matchFound = True
             elif "career interest" in userEntry:
                 careerInterest(userEntry.split()[-1])

@@ -177,7 +177,7 @@ def answer():
                         city = "Delhi"
                     getweather(city)
                     matchFound = True
-                elif userEntry.split()[-1] in ['science', 'commerce', 'humanitites']:
+                elif userEntry.split()[-1] in ['science', 'commerce', 'humanities']:
                     careerInterest(userEntry.split()[-1])
                     matchFound = True
                 elif userEntry.split()[-1] in totalSub:
